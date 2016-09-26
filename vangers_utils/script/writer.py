@@ -20,7 +20,6 @@ class Writer:
 
     INDENT_SYMBOL = '  '
     ARR_INDENT_SYMBOL = '- '
-    iSCRIPT_EOF = 8383
 
 
     def __init__(self, in_f: str, out_f: str):
@@ -41,8 +40,7 @@ class Writer:
 
     def new_section(self)->Section:
         sid = self._reader.read('int32')
-        if sid == self.iSCRIPT_EOF:
-            return None
+
         self._section = Section(sid)
         if self._section == Section.I_END_BLOCK:
             indent = self._indent[:-len(self.INDENT_SYMBOL)]
@@ -70,7 +68,7 @@ class Writer:
             size = length
         if length is None:
             self._write_indent()
-            self._out.write("{indent}{arr_indent}$size: {value}\n".format(
+            self._out.write("{indent}{arr_indent}$size: !!int {value}\n".format(
                     indent=self.INDENT_SYMBOL,
                     arr_indent=self.ARR_INDENT_SYMBOL,
                     value=size,

@@ -18,7 +18,7 @@ FM_NO_ALIGN = 0x1000
 FM_MAIN_MENU = 0x2000
 FM_RANGE_FONT = 0x4000
 
-class Converter:
+class BinToYamlConverter:
     def __init__(self, in_file: str, out_file: str):
         self.writer = Writer(in_file, out_file)
         # self.writer = YamlWriter(in_file, out_file)
@@ -268,7 +268,7 @@ class Converter:
         print(cmprs)
         while True:
             section = self.writer.new_section()
-            if section == None:
+            if section == Section.I_SCRIPT_EOF:
                 break
             #    while(!script1 -> EOF_Flag){
             ##ifndef _BINARY_SCRIPT_

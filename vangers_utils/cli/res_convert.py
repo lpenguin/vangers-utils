@@ -1,5 +1,6 @@
 import argparse
-from vangers_utils.script.convert import Converter
+from vangers_utils.script.bin_convert import BinToYamlConverter
+from vangers_utils.script.yaml_convert import YamlToBinConverter
 
 
 def main():
@@ -8,6 +9,7 @@ def main():
     parser.add_argument('out')
 
     args = parser.parse_args()
-    Converter(args.in_, args.out).convert()
+    YamlToBinConverter(args.in_, args.out).convert()
+    # BinToYamlConverter(args.in_, args.out).convert()
 
 

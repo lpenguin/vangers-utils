@@ -157,6 +157,7 @@ class Section(Enum):
     SET_TEMPLATE = 152
     SET_ESCAVE_FLAG = 153
     ADD_MAP_INFO_FILE = 154
+    I_SCRIPT_EOF = 8383
 
 
 class Mode(Enum):

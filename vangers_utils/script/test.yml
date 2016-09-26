@@ -1,0 +1,68 @@
+root:
+    location_data:
+        $id: 55
+        trigger: 1
+        color_scheme:
+            $numColorScheme: 10
+            $schemeId: 100
+            color:
+                $id: 42
+                $value: 44
+            color:
+                $id: 2
+                $value: 4
+
+section root # new_object
+    section location_data # new_object
+        int $id 55
+        section trigger # property
+            int 1
+        section posx # property
+            int 44
+        section posy # property
+            int 96
+        section color_scheme # new_object
+            int $numColorScheme 10
+            int $schemeId 100
+            section color # multi_property
+                int $id 42
+                int $value 44
+            section color # multi_property
+                int $id 2
+                int $value 3
+
+root: # new_object
+    location_data: # new_object
+        $id: 55
+        trigger: # property
+            $v: 1
+        posx: # property
+            $v: 44 
+        posy: # property
+            $v: 96
+        color_scheme: # new_object
+            $numColorScheme: 10
+            $schemeId: 100
+            color: # multi_property
+                $id: 42
+                $value: 44
+            color: # multi_property
+                $id: 2
+                $value: 3
+
+root: # new_object
+    location_data: # new_object
+        $id: i55
+        trigger: i1 # property
+        posx: i44 # property
+        posy: i96 # property
+        $flag: fINV_ITEM_NO_ACTIVATE
+        color_scheme: # new_object
+            $numColorScheme: i10
+            $schemeId: s100
+            color: # multi_property
+                $id: i42
+                $value: i44
+            color: # multi_property
+                $id: i2
+                $value: i3

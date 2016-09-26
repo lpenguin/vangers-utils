@@ -1,4 +1,5 @@
 import struct
+import yaml
 
 
 class BinaryReaderEOFException(Exception):
@@ -34,6 +35,9 @@ class BinaryReader:
         if typeName == 'str':
             return self._read_str()
 
+        if typeName == 'str0':
+            return self._read_zero_ended_str()
+
         typeFormat = BinaryReader.typeNames[typeName.lower()]
         typeSize = struct.calcsize(typeFormat)
         value = self.file.read(typeSize)
@@ -44,11 +48,26 @@ class BinaryReader:
     def _read_str(self):
         size = self.read('int32')
         data = self.file.read(size+1)
-        return struct.unpack('{}s'.format(size), data)[0]
+        unpacked =  struct.unpack('{}s'.format(size), data[:-1])[0]
+        
+        # print(unpacked)
+        try:
+            return repr(unpacked.decode('CP866'))
+        except UnicodeDecodeError:
+            return repr(yaml.dump(unpacked))
 
     def rest(self)->bytes:
         return self.file.read()
 
     def __del__(self):
         self.file.close()
+
+    def _read_zero_ended_str(self):
+        data = ''
+        while True:
+            c = self.read('char')
+            if c == b'\x00':
+                break
+            data += c.decode()
+        return data
 

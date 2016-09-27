@@ -5,7 +5,7 @@
 
 from typing import Dict
 
-from vangers_utils.bmp import read_image
+from vangers_utils.image.bmp import read_image
 
 
 def main(args: Dict[str, str]):

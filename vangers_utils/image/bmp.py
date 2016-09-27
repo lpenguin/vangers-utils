@@ -1,7 +1,7 @@
 from PIL import Image
 
 from vangers_utils import binary_reader
-from vangers_utils import config, image_misc, palette
+from vangers_utils.image import config, image_misc, palette
 
 
 def read_image(file_name: str, pal: str=None)->Image:

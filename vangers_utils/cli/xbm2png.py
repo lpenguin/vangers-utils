@@ -5,7 +5,7 @@
 """
 
 from typing import Dict
-from vangers_utils.xbm import read_image
+from vangers_utils.image.xbm import read_image
 
 
 def main(args: Dict[str, str]):

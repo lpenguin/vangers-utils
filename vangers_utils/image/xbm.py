@@ -2,8 +2,7 @@ import numpy as np
 from PIL import Image
 
 from vangers_utils import binary_reader
-from vangers_utils import config
-from vangers_utils import image_misc
+from vangers_utils.image import image_misc
 
 
 class XbmImage:

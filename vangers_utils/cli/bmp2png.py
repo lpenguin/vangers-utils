@@ -1,6 +1,6 @@
 """usage: vangers-utils bmp2png [options] <in> <out>
 
-    --palette <palette=value>
+    --palette VALUE
 """
 
 from typing import Dict

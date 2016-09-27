@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-from vangers_utils import binary_reader, image_decoder
+from vangers_utils import binary_reader
 from vangers_utils import config
 from vangers_utils import image_misc
 

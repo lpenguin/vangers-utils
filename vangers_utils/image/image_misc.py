@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-from vangers_utils import config
+from vangers_utils.image import config
 
 
 def from_bytes(b: bytes, width: int, height: int, palette: str=None)->Image:

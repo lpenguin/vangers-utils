@@ -1,7 +1,5 @@
-from vangers_utils.script.options import Section, Mode
-# from vangers_utils.script.writer import Writer
-from vangers_utils.script.writer import Writer
-from vangers_utils.script.yaml_writer import YamlWriter
+from vangers_utils.scb.options import Section, Mode
+from vangers_utils.scb.scb2yaml.yaml_writer import YamlWriter
 
 FM_REDRAW = 0x01
 FM_FLUSH = 0x02
@@ -18,10 +16,10 @@ FM_NO_ALIGN = 0x1000
 FM_MAIN_MENU = 0x2000
 FM_RANGE_FONT = 0x4000
 
-class BinToYamlConverter:
+class ScbToYamlConverter:
     def __init__(self, in_file: str, out_file: str):
-        self.writer = Writer(in_file, out_file)
-        # self.writer = YamlWriter(in_file, out_file)
+        # self.writer = Writer(in_file, out_file)
+        self.writer = YamlWriter(in_file, out_file)
         self.mlEvSeqSize = None
         self.fnMenuFlags = 0
         self.iScreenFlag = None
@@ -264,8 +262,6 @@ class BinToYamlConverter:
 
         t = self.writer._reader.read('str0')
         cmprs = self.writer._reader.read('int32')
-        print(t)
-        print(cmprs)
         while True:
             section = self.writer.new_section()
             if section == Section.I_SCRIPT_EOF:

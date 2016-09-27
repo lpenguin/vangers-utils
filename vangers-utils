@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""
+usage: vangers-utils <command> [<args>...]
+
+The most commonly used git commands are:
+   scb2yml    Convert scb to yml
+   yml2scb    Convert yml to scb
+
+See 'vangers-utils.py help <command>' for more information on a specific command.
+"""
+
+from docopt import docopt
+
+
+if __name__ == '__main__':
+    args = docopt(__doc__,
+                  options_first=True)
+    argv = [args['<command>']] + args['<args>']
+    if args['<command>'] == 'scb2yml':
+        from vangers_utils.cli import scb2yaml
+        scb2yaml.main(docopt(scb2yaml.__doc__, argv=argv))
+    elif args['<command>'] == 'yml2scb':
+        from vangers_utils.cli import yaml2scb
+        yaml2scb.main(docopt(yaml2scb.__doc__, argv=argv))
+    else:
+        exit("%r is not a vangers-utils command. See 'vangers-utils  help'." % args['<command>'])

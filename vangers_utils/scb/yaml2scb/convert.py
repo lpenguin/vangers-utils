@@ -3,10 +3,10 @@ from typing import Optional
 import yaml
 
 from vangers_utils.binary_writer import BinaryWriter
-from vangers_utils.script.options import Section
+from vangers_utils.scb.options import Section
 
 
-class YamlToBinConverter:
+class YamlToScbConverter:
     KNOWN_TYPES = {
         'int': int,
         'str': str,
@@ -29,10 +29,10 @@ class YamlToBinConverter:
 
         writer.write(type_name, value)
 
-    def convert(self):
+    def convert(self, verbose: bool=False):
         with open(self._in_file, 'rt') as in_f:
             with open(self._out_file, 'wb') as out_f:
-                writer = BinaryWriter(out_f, verbose=True)
+                writer = BinaryWriter(out_f, verbose=verbose)
                 writer.write('str0', 'BIN_SCR_1_00')
                 writer.write('int', 0)
 
@@ -46,7 +46,8 @@ class YamlToBinConverter:
                         if value.startswith('$'):
                             continue
                         if value.startswith('Section.'):
-                            print(value)
+                            if verbose:
+                                print(value)
                             self._write_section(value, writer)
                         else:
                             self._write_value(value, event.tag, writer)

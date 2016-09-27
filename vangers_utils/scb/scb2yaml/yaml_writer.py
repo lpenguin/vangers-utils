@@ -1,8 +1,10 @@
 from typing import Tuple, List, Any
+
+import sys
 import yaml
 
 from vangers_utils.binary_reader import BinaryReader
-from vangers_utils.script.options import Section, Mode
+from vangers_utils.scb.options import Section, Mode
 
 
 class YamlWriter:
@@ -34,19 +36,30 @@ class YamlWriter:
         self._n_section = 0
         self._level = 0
 
+        self._add_mapping_end_on_end_block = True
+
         self._events = []  # type: List[yaml.Event]
         self._events.append(yaml.StreamStartEvent(encoding='utf-8'))
         self._events.append(yaml.DocumentStartEvent(explicit=True))
         self._add_mapping_start()
 
     def new_section(self)->Section:
+        self._add_mapping_end_on_end_block = True
+
         sid = self._reader.read('int32')
-        if sid == self.iSCRIPT_EOF:
-            self._add_mapping_end()
-            return None
         self._section = Section(sid)
-        if self._section == Section.I_END_BLOCK:
+        if sid == self.iSCRIPT_EOF:
+            self._add_scalar(str(self._section), implicit=True)
+            self._add_scalar('')
             self._add_mapping_end()
+            return Section.I_SCRIPT_EOF
+
+        if self._section == Section.I_END_BLOCK:
+            if self._level > 1:
+                self._add_mapping_end()
+            self._add_scalar(str(self._section), implicit=True)
+            self._add_scalar('', implicit=True)
+            self._add_mapping_end_on_end_block = False
             return self._section
 
         self._n_section += 1
@@ -59,9 +72,13 @@ class YamlWriter:
     #     self._out.write(self._indent)
 
     def _add_scalar(self, value: Any, implicit: bool=False):
-        tag = 'tag:yaml.org,2002:{}'.format(type(value).__name__)
+        if value == '':
+            tag = None
+        else:
+            tag = u'tag:yaml.org,2002:{}'.format(type(value).__name__)
         value = str(value)
-        if value.startswith('$') or value.startswith('Section.'):
+
+        if value.startswith('$') or value.startswith('Section.') or value == '':
             tag = None
             implicit = (True, False)
         else:
@@ -77,12 +94,17 @@ class YamlWriter:
         )
 
     def _add_mapping_start(self):
+        self._level += 1
         self._events.append(
             # yaml.MappingStartEvent(anchor=None, tag=u'tag:yaml.org,2002:map', implicit=True, flow_style=False)
             yaml.MappingStartEvent(anchor=None, tag=None, implicit=True, flow_style=False)
         )
 
     def _add_mapping_end(self):
+        if self._level == 0:
+            sys.stderr.write("Attempt to decrease mapping level\n")
+            return
+        self._level -= 1
         self._events.append(
             yaml.MappingEndEvent()
         )
@@ -101,7 +123,7 @@ class YamlWriter:
         # self._add_mapping_start()
         for spec_name, spec_type in param_specs:
             value = self._reader.read(spec_type)
-            self._add_scalar(spec_name)
+            self._add_scalar('$'+spec_name)
             self._add_scalar(value)
         # self._add_mapping_end()
 
@@ -123,7 +145,7 @@ class YamlWriter:
             self._add_mapping_start()
             for n, (spec_name, spec_type) in enumerate(param_specs):
                 value = self._reader.read(spec_type)
-                self._add_scalar(spec_name)
+                self._add_scalar('$'+spec_name)
                 self._add_scalar(value)
             self._add_mapping_end()
         self._add_sequence_end()
@@ -134,7 +156,7 @@ class YamlWriter:
     def set_mode(self, mode: Mode):
         self._mode = mode
         self._indent += self.INDENT_SYMBOL
-        self._level += 1
+        self._add_mapping_end_on_end_block = False
         # self._write_indent()
         # self._out.write("# mode = {}\n".format(self._mode))
 
@@ -157,7 +179,7 @@ class YamlWriter:
         # self._out.write('\n')
 
     def str(self, name: str=None, comment: str=None):
-        data = self._reader.read('str')
+        data = self._reader.read('str').replace('\r', '\\r').replace('\n', '\\n')
         self._value(data, comment, name)
 
     def int(self, name: str=None, comment: str=None)->int:
@@ -188,7 +210,8 @@ class YamlWriter:
 
     def flag(self, flag_name: str):
         # self.comment("FLAG: "+flag_name)
-        self._value('$FLAG', '$'+flag_name)
+        # self._value('$FLAG', '$'+flag_name)
+        pass
 
     def end_block(self, new_mode):
         # self._indent = self._indent[:-len(self.INDENT_SYMBOL)]
@@ -212,12 +235,13 @@ class YamlWriter:
             yaml.StreamEndEvent(),
         )
 
-        for e in self._events:
-            print(e)
-        # yaml.emit(self._events, stream=self._out._f)
+        # for n, e in enumerate(self._events):
+        #     print(e)
+        yaml.emit(self._events, stream=self._out._f, allow_unicode=True)
         # yaml.emit(self._events)
 
     def end_section(self):
-        self._add_mapping_end()
+        if self._add_mapping_end_on_end_block:
+            self._add_mapping_end()
 
 

@@ -48,11 +48,10 @@ class BinaryReader:
     def _read_str(self):
         size = self.read('int32')
         data = self.file.read(size+1)
-        unpacked =  struct.unpack('{}s'.format(size), data[:-1])[0]
-        
-        # print(unpacked)
+        unpacked = struct.unpack('{}s'.format(size), data[:-1])[0]
+
         try:
-            return repr(unpacked.decode('CP866'))
+            return unpacked.decode('CP866')
         except UnicodeDecodeError:
             return repr(yaml.dump(unpacked))
 

@@ -1,4 +1,4 @@
-"""usage: vangers-utils scb2yml [options] <in> <out>
+"""usage: vangers-utils scb [options] <in> <out>
 
     -d, --decode        decode image from scb
     -e, --encode        encode image to scb
@@ -32,4 +32,4 @@ def main(args: Dict[str, str]):
     elif args['--encode']:
         _encode(in_filename, out_filename, bool(args['--verbose']))
     else:
-        raise docopt.DocoptExit('Must choose: -e or -d')
+        raise docopt.DocoptExit('Choose: -e or -d')

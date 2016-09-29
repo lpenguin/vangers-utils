@@ -59,7 +59,4 @@ def main(args: Dict[str, str]):
     elif args['--encode']:
         _encode(in_filename, out_filename)
     else:
-        raise docopt.DocoptExit('Must choose: -e or -d')
-
-
-
+        raise docopt.DocoptExit('Choose: -e or -d')

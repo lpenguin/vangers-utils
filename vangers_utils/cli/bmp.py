@@ -8,16 +8,19 @@
 """
 
 from typing import Dict
+
+import docopt
 import yaml
 
 from vangers_utils.image import config
-from vangers_utils.image.bmp.decode import read_image
-from vangers_utils.image.image_misc import get_meta_filename
+from vangers_utils.image.bmp.decode import decode_image
+from vangers_utils.image.bmp.encode import encode_image
+from vangers_utils.image.misc import get_meta_filename
 
 
 def _decode(in_filename: str, out_filename: str,
             is_bmp: bool = True, is_background: bool = False, is_no_offsets: bool = False):
-    bmp_image = read_image(
+    bmp_image = decode_image(
         file_name=in_filename,
         palette=config.PALETTE_2,
         is_bmp=is_bmp,
@@ -29,6 +32,16 @@ def _decode(in_filename: str, out_filename: str,
         yaml.dump(bmp_image.meta, f, default_flow_style=False)
 
     bmp_image.image.save(out_filename)
+
+
+def _encode(in_filename: str, out_filename: str):
+    meta_filename = get_meta_filename(in_filename)
+    with open(meta_filename) as f:
+        meta = yaml.load(f)
+
+    bytes_res = encode_image(in_filename, meta, pal=config.PALETTE_2)
+    with open(out_filename, 'wb') as f:
+        f.write(bytes_res)
 
 
 def main(args: Dict[str, str]):
@@ -43,6 +56,10 @@ def main(args: Dict[str, str]):
             is_background=bool(args['--background']),
             is_no_offsets=bool(args['--no-offsets']),
         )
+    elif args['--encode']:
+        _encode(in_filename, out_filename)
+    else:
+        raise docopt.DocoptExit('Must choose: -e or -d')
 
 
 

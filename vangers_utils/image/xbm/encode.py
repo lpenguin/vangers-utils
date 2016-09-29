@@ -1,39 +1,23 @@
 from io import BytesIO
 from itertools import chain
-from typing import Dict, Tuple, List
+
 import numpy as np
 from PIL import Image
 
 from vangers_utils.binary_writer import BinaryWriter
-from vangers_utils.image.config import PALETTE, PALETTE_2
+from vangers_utils.image.config import PALETTE_2
+from vangers_utils.image.palette import color_index, create_palette_mapping
 from vangers_utils.image.xbm.image import XbmImage
-
-
-def _color_index(c: Tuple[int, int, int])->int:
-    r, g, b = c
-    return b + 256 * g + 256 * 256 * r
-
-
-def _create_palette_mapping(pal: List[int])->Dict[int, np.uint8]:
-    res = {}  # type: Dict[int, np.uint8]
-    for i in range(0, len(pal), 3):
-        r, g, b = pal[i], pal[i + 1], pal[i + 2]
-        index = _color_index((r, g, b))
-        if index in res:
-            continue
-        res[index] = np.uint8(i // 3)
-
-    return res
 
 
 class XbmEncoder:
     def __init__(self):
-        self._pal_mapping = _create_palette_mapping(PALETTE_2)
+        self._pal_mapping = create_palette_mapping(PALETTE_2)
         self._transparent_color = 255 #self._pal_mapping[_color_index((32, 76, 32))]
 
     def _rgb_to_256(self, data: np.ndarray)->np.ndarray:
         def _to_256(x):
-            return self._pal_mapping[_color_index(x[:3])]
+            return self._pal_mapping[color_index(x[:3])]
 
         encoded = np.apply_along_axis(_to_256, 2, data)
 

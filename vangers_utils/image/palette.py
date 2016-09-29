@@ -1,3 +1,8 @@
+from typing import Tuple, List, Dict
+
+import numpy as np
+
+
 def bit(x, n):
     return (x & (1 << n)) >> n
 
@@ -46,3 +51,20 @@ def make_palette(mask):
         palette.append(c)
         palette.append(c)
     return palette
+
+
+def color_index(c: Tuple[int, int, int])->int:
+    r, g, b = c
+    return b + 256 * g + 256 * 256 * r
+
+
+def create_palette_mapping(pal: List[int])->Dict[int, np.uint8]:
+    res = {}  # type: Dict[int, np.uint8]
+    for i in range(0, len(pal), 3):
+        r, g, b = pal[i], pal[i + 1], pal[i + 2]
+        index = color_index((r, g, b))
+        if index in res:
+            continue
+        res[index] = np.uint8(i // 3)
+
+    return res

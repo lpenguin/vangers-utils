@@ -3,7 +3,7 @@ from PIL import Image
 
 from vangers_utils import binary_reader
 from vangers_utils.image import config
-from vangers_utils.image import image_misc
+from vangers_utils.image import misc
 from vangers_utils.image.xbm.image import XbmImage
 
 
@@ -31,7 +31,7 @@ def _decode_image(image_data: bytes, screen_width: int, screen_height: int) -> I
         height=screen_height)
 
     screen = reader.decode()
-    im = image_misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=config.PALETTE_2)
+    im = misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=config.PALETTE_2)
     return im#image_misc.replace_transparent(im)
 
 

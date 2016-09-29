@@ -5,14 +5,13 @@ import numpy as np
 from PIL import Image
 
 from vangers_utils.binary_writer import BinaryWriter
-from vangers_utils.image.config import PALETTE_2
-from vangers_utils.image.palette import color_index, create_palette_mapping
+from vangers_utils.image.palette import color_index, create_palette_mapping, PALETTE
 from vangers_utils.image.xbm.image import XbmImage
 
 
 class XbmEncoder:
     def __init__(self):
-        self._pal_mapping = create_palette_mapping(PALETTE_2)
+        self._pal_mapping = create_palette_mapping(PALETTE)
         self._transparent_color = 255 #self._pal_mapping[_color_index((32, 76, 32))]
 
     def _rgb_to_256(self, data: np.ndarray)->np.ndarray:

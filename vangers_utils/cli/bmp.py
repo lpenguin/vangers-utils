@@ -12,7 +12,7 @@ from typing import Dict
 import docopt
 import yaml
 
-from vangers_utils.image import config
+import vangers_utils.image.palette
 from vangers_utils.image.bmp.decode import decode_image
 from vangers_utils.image.bmp.encode import encode_image
 from vangers_utils.image.misc import get_meta_filename
@@ -22,7 +22,7 @@ def _decode(in_filename: str, out_filename: str,
             is_bmp: bool = True, is_background: bool = False, is_no_offsets: bool = False):
     bmp_image = decode_image(
         file_name=in_filename,
-        palette=config.PALETTE_2,
+        palette=vangers_utils.image.palette.PALETTE,
         is_bmp=is_bmp,
         is_background=is_background,
         is_no_offsets=is_no_offsets,
@@ -39,7 +39,7 @@ def _encode(in_filename: str, out_filename: str):
     with open(meta_filename) as f:
         meta = yaml.load(f)
 
-    bytes_res = encode_image(in_filename, meta, pal=config.PALETTE_2)
+    bytes_res = encode_image(in_filename, meta, pal=vangers_utils.image.palette.PALETTE)
     with open(out_filename, 'wb') as f:
         f.write(bytes_res)
 

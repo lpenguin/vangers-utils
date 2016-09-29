@@ -4,12 +4,12 @@ from typing import List, Tuple
 import numpy as np
 from PIL import Image
 
-from vangers_utils.image import config
+import vangers_utils.image.palette
 
 
 def from_bytes(b: bytes, width: int, height: int, palette: List[int]=None)->Image:
     im = Image.frombytes('L', (width, height), b)
-    im.putpalette(palette or config.PALETTE_2)
+    im.putpalette(palette or vangers_utils.image.palette.PALETTE)
     return im.convert('RGBA')
 
 

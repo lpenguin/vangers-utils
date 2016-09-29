@@ -1,5 +1,5 @@
 import struct
-from typing import Any, BinaryIO
+from typing import Any
 
 
 class BinaryWriter:
@@ -19,8 +19,8 @@ class BinaryWriter:
         'char': 's'
     }
 
-    def __init__(self, file: BinaryIO, verbose: bool=False):
-        self._file = file
+    def __init__(self, file_io, verbose: bool = False):
+        self._file = file_io
         self.pos = 0
         self._verbose = verbose
 

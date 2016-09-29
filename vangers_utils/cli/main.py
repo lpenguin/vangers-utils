@@ -1,7 +1,7 @@
 """
 usage: vangers-utils <command> [<args>...]
 
-The most commonly used git commands are:
+The most commonly used commands are:
    scb        Decode/encode scb
    bmp        Decode/encode bmp
    xbm        Decode/encode xbm

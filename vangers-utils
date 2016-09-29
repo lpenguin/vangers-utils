@@ -5,14 +5,14 @@ usage: vangers-utils <command> [<args>...]
 The most commonly used git commands are:
    scb2yml    Convert scb to yml
    yml2scb    Convert yml to scb
-   bmp2png    Convert bmp2png
+   bmp        Convert bmp
    xbm        Convert xbm
 
 See 'vangers-utils.py help <command>' for more information on a specific command.
 """
 
 from docopt import docopt
-from vangers_utils.cli import yaml2scb, scb2yaml, bmp2png, xbm
+from vangers_utils.cli import yaml2scb, scb2yaml, bmp, xbm
 
 if __name__ == '__main__':
     args = docopt(__doc__,
@@ -22,8 +22,8 @@ if __name__ == '__main__':
         scb2yaml.main(docopt(scb2yaml.__doc__, argv=argv))
     elif args['<command>'] == 'yml2scb':
         yaml2scb.main(docopt(yaml2scb.__doc__, argv=argv))
-    elif args['<command>'] == 'bmp2png':
-        bmp2png.main(docopt(bmp2png.__doc__, argv=argv))
+    elif args['<command>'] == 'bmp':
+        bmp.main(docopt(bmp.__doc__, argv=argv))
     elif args['<command>'] == 'xbm':
         xbm.main(docopt(xbm.__doc__, argv=argv))
     else:

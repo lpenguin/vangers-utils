@@ -1,7 +1,8 @@
+import re
 from typing import List, Tuple
+
 import numpy as np
 from PIL import Image
-import re
 
 from vangers_utils.image import config
 
@@ -21,3 +22,4 @@ def replace_transparent(image: Image, transparent_color: Tuple[int, int, int, in
 
 def get_meta_filename(filename: str)->str:
     return re.sub(r'^(.*)\.\w+$', r'\g<1>.meta.yaml', filename)
+

@@ -12,7 +12,7 @@ import docopt
 import yaml
 import re
 
-from vangers_utils.image.image_misc import get_meta_filename
+from vangers_utils.image.misc import get_meta_filename
 from vangers_utils.image.xbm.decode import decode_image
 from vangers_utils.image.xbm.encode import encode_image
 from vangers_utils.image.xbm.image import XbmImage

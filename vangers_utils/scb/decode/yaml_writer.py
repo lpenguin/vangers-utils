@@ -3,15 +3,13 @@ from typing import Tuple, List, Any
 
 import yaml
 
-from vangers_utils.scb.options import Section, Mode
+from vangers_utils.scb.options import Section
 
 
 class YamlWriter:
     iSCRIPT_EOF = 8383
 
     def __init__(self, out_file_io):
-        self._mode = Mode.AS_NONE  # type: Mode
-
         self._out_f = out_file_io
         self._level = 0
 
@@ -28,7 +26,9 @@ class YamlWriter:
         if section in (Section.I_END_BLOCK, Section.I_SCRIPT_EOF):
             self._add_scalar(str(section), implicit=True)
             self._add_scalar('', implicit=True)
-            self._add_mapping_end_on_end_block = False
+            if section == Section.I_END_BLOCK and self._level > 1:
+                self._add_mapping_end()
+
             return section
 
         self._add_scalar(str(section), implicit=True)
@@ -67,7 +67,7 @@ class YamlWriter:
 
     def _add_sequence_start(self):
         self._events.append(
-            yaml.SequenceStartEvent(anchor=None, tag=u'tag:yaml.org,2002:seq', implicit=True, flow_style=True),
+            yaml.SequenceStartEvent(anchor=None, tag=u'tag:yaml.org,2002:seq', implicit=True, flow_style=False),
         )
 
     def _add_sequence_end(self):
@@ -87,6 +87,7 @@ class YamlWriter:
         if write_size:
             self._add_mapping_start()
             self._add_scalar('$size')
+            # noinspection PyTypeChecker
             self._add_scalar(size)
             self._add_mapping_end()
 
@@ -98,8 +99,7 @@ class YamlWriter:
             self._add_mapping_end()
         self._add_sequence_end()
 
-    def set_mode(self, mode: Mode):
-        self._mode = mode
+    def new_object_level(self):
         self._add_mapping_end_on_end_block = False
 
     def value(self, value, comment, name=None):
@@ -108,7 +108,12 @@ class YamlWriter:
         self._add_scalar(pname)
         self._add_scalar(value)
 
+    def end_section(self):
+        if self._add_mapping_end_on_end_block:
+            self._add_mapping_end()
+
     def flush(self):
+        # print(self._level)
         self._add_mapping_end()
         self._events.append(
             yaml.DocumentEndEvent(explicit=True),
@@ -118,7 +123,3 @@ class YamlWriter:
         )
 
         yaml.emit(self._events, stream=self._out_f, allow_unicode=True)
-
-    def end_section(self):
-        if self._add_mapping_end_on_end_block:
-            self._add_mapping_end()

@@ -41,6 +41,7 @@ class DecoderTrait:
 
     def set_mode(self, mode: Mode):
         self._mode = mode
+        self._writer.new_object_level()
 
     def int(self, name: str = None, comment: str = None) -> int:
         data = self._reader.read('int32')

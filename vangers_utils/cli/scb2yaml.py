@@ -3,7 +3,7 @@
     -h, --help
 """
 from typing import Dict
-from vangers_utils.scb.scb2yaml.convert import ScbToYamlConverter
+from vangers_utils.scb.decode.convert import ScbToYamlConverter
 
 
 def main(args: Dict[str, str]):

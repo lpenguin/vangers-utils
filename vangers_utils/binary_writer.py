@@ -24,21 +24,33 @@ class BinaryWriter:
         self.pos = 0
         self._verbose = verbose
 
+    def set_verbose(self, verbose: bool):
+        self._verbose = verbose
+
     def write(self, type_name: str, value: Any):
         if type_name == 'str':
             packed = self._pack_str(value)
         elif type_name == 'str0':
             packed = self._pack_zero_ended_str(value)
+        elif type_name == 'bytes':
+            packed = value
         else:
             type_format = BinaryWriter.TYPE_NAMES[type_name.lower()]
             packed = self._pack_value(type_format, value)
         if self._verbose:
-            print("0x{:x} {} ({}:{})".format(
-                self.pos,
-                ':'.join(format(b, '02x') for b in packed),
-                value,
-                type_name
-            ))
+            if type_name == 'bytes':
+                print("0x{:x} {}... (bytes({}))".format(
+                    self.pos,
+                    ':'.join(format(b, '02x') for b in packed[:10]),
+                    len(packed)
+                ))
+            else:
+                print("0x{:x} {} ({}:{})".format(
+                    self.pos,
+                    ':'.join(format(b, '02x') for b in packed),
+                    value,
+                    type_name
+                ))
 
         self.pos += self._file.write(packed)
 
@@ -62,7 +74,4 @@ class BinaryWriter:
 
     def rest(self)->bytes:
         return self._file.read()
-
-    def __del__(self):
-        self._file.close()
 

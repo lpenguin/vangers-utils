@@ -1,6 +1,6 @@
 """usage: vangers-utils bmp [options] <in> <out>
 
-    -d, --decode        decode image from bmp [default: True]
+    -d, --decode        decode image from bmp
     -e, --encode        encode image to bmp
     --no-bmp            BMP_FLAG
     --background        BG_FLAG

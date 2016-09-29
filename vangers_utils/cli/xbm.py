@@ -1,6 +1,6 @@
 """usage: vangers-utils xbm [options] <in> <out>
 
-    -d, --decode        decode image from xbm [default: True]
+    -d, --decode        decode image from xbm
     -e, --encode        encode image to xbm
     -W, --width WIDTH   image width [default: 800]
     -H, --height HEIGHT image height  [default: 600]

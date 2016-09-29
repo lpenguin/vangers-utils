@@ -7,6 +7,7 @@
     --no-offsets        BML_NO_OFFSETS
 """
 
+import re
 from typing import Dict
 
 import docopt
@@ -31,7 +32,12 @@ def _decode(in_filename: str, out_filename: str,
     with open(meta_filename, 'w') as f:
         yaml.dump(bmp_image.meta, f, default_flow_style=False)
 
-    bmp_image.image.save(out_filename)
+    if len(bmp_image.images) == 1:
+        bmp_image.images[0].save(out_filename)
+    else:
+        for n, image in enumerate(bmp_image.images):
+            f = re.sub(r'^(.*)\.(\w+)$', r'\g<1>.{}.\g<2>'.format(n), out_filename)
+            image.save(f)
 
 
 def _encode(in_filename: str, out_filename: str):

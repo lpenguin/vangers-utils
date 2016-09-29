@@ -1,3 +1,4 @@
+from io import BytesIO
 from typing import List, Dict
 
 from PIL import Image
@@ -7,15 +8,17 @@ from vangers_utils.image import misc
 
 
 class BmpImage:
-    def __init__(self, image: Image, meta: Dict[str, int]):
-        self.image = image
+    def __init__(self, images: List, meta: Dict[str, int]):
+        self.images = images
         self.meta = meta
 
 
 def decode_image(file_name: str, palette: List[int],
                  is_bmp: bool=True, is_background: bool=False, is_no_offsets: bool=False)-> BmpImage:
+    with open(file_name, 'rb') as f:
+        bytes_io = BytesIO(f.read())
 
-    reader = binary_reader.BinaryReader(file_name)
+    reader = binary_reader.BinaryReader(bytes_io)
 
     meta = {
         'sizex': None,
@@ -47,15 +50,18 @@ def decode_image(file_name: str, palette: List[int],
         else:
             meta['size'] = 1
 
-    b = reader.rest()
+    images = []  # type: List[Image]
+    for _ in range(meta['size']):
+        b = bytes_io.read(meta['sizex'] * meta['sizey'])
+        im = misc.from_bytes(b, meta['sizex'], meta['sizey'], palette=palette)
+        # transparent_color = (240, 160, 0, 255)
+        r, g, b = palette[-3:]
+        transparent_color = (r, g, b, 255)
+        image = misc.replace_transparent(im, transparent_color)
+        images.append(image)
 
-    im = misc.from_bytes(b, meta['sizex'], meta['sizey'], palette=palette)
-    # transparent_color = (240, 160, 0, 255)
-    r, g, b = palette[-3:]
-    transparent_color = (r, g, b, 255)
-    image = misc.replace_transparent(im, transparent_color)
     return BmpImage(
-        image=image,
+        images=images,
         meta=meta,
     )
 

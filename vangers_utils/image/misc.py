@@ -21,5 +21,9 @@ def replace_transparent(image: Image, transparent_color: Tuple[int, int, int, in
 
 
 def get_meta_filename(filename: str)->str:
-    return re.sub(r'^(.*)\.\w+$', r'\g<1>.meta.yaml', filename)
+    return replace_extension(filename, 'meta.yaml')
 
+
+def replace_extension(filename: str, new_extension: str) -> str:
+    new_extension = new_extension.rstrip('.')
+    return re.sub(r'^(.*)\.\w+$', r'\g<1>.' + new_extension, filename)

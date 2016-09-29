@@ -2,35 +2,9 @@ import numpy as np
 from PIL import Image
 
 from vangers_utils import binary_reader
+from vangers_utils.image import config
 from vangers_utils.image import image_misc
-
-
-class XbmImage:
-    class Meta:
-        def __init__(self, posx: int, posy: int, size_x: int, size_y: int, b_size_x: int, b_size_y: int,
-                     image_size: int):
-            self.image_size = image_size
-            self.posx = posx
-            self.posy = posy
-            self.size_x = size_x
-            self.size_y = size_y
-            self.b_size_x = b_size_x
-            self.b_size_y = b_size_y
-
-        def __str__(self):
-            return """XbmImage.Meta(
-    image_size={image_size},
-    posx={posx},
-    posy={posy},
-    size_x={size_x},
-    size_y={size_y},
-    b_size_x={b_size_x},
-    b_size_y={b_size_y})
-            """.format(**self.__dict__)
-
-    def __init__(self, meta: 'XbmImage.Meta', image: Image):
-        self.meta = meta
-        self.image = image
+from vangers_utils.image.xbm.image import XbmImage
 
 
 def _read_meta_and_data(file_name: str) -> (XbmImage.Meta, bytes):
@@ -57,11 +31,21 @@ def _decode_image(image_data: bytes, screen_width: int, screen_height: int) -> I
         height=screen_height)
 
     screen = reader.decode()
-    im = image_misc.from_bytes(screen.tobytes(), screen_width, screen_height)
-    return image_misc.replace_transparent(im)
+    im = image_misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=config.PALETTE_2)
+    return im#image_misc.replace_transparent(im)
 
 
-def read_image(file_name: str, screen_width: int, screen_height: int)->XbmImage:
+def decode_image(file_name: str, screen_width: int, screen_height: int)-> XbmImage:
+    meta, data = _read_meta_and_data(file_name)
+    return XbmImage(
+        meta=meta,
+        image=_decode_image(image_data=data,
+                            screen_width=screen_width,
+                            screen_height=screen_height)
+    )
+
+
+def encode_image(file_name: str, screen_width: int, screen_height: int)-> XbmImage:
     meta, data = _read_meta_and_data(file_name)
     return XbmImage(
         meta=meta,

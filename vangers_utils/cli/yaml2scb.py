@@ -5,7 +5,7 @@
 """
 
 from typing import Dict
-from vangers_utils.scb.yaml2scb.convert import YamlToScbConverter
+from vangers_utils.scb.encode.convert import YamlToScbConverter
 
 
 def main(args: Dict[str, str]):

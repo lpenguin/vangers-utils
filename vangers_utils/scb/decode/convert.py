@@ -1,5 +1,5 @@
 from vangers_utils.scb.options import Section, Mode
-from vangers_utils.scb.scb2yaml.yaml_writer import YamlWriter
+from vangers_utils.scb.decode.yaml_writer import YamlWriter
 
 FM_REDRAW = 0x01
 FM_FLUSH = 0x02

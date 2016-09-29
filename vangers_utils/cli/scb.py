@@ -10,14 +10,14 @@ from typing import Dict
 
 import docopt
 
-from vangers_utils.scb.decode.convert import ScbToYamlEncoder
+from vangers_utils.scb.decode.decoder import ScbToYamlDecoder
 from vangers_utils.scb.encode.convert import YamlToScbConverter
 
 
 def _decode(in_filename: str, out_filename: str):
     with open(in_filename, 'rb') as in_f:
         with open(out_filename, 'wt') as out_f:
-            ScbToYamlEncoder(in_f, out_f).convert()
+            ScbToYamlDecoder(in_f, out_f).convert()
 
 
 def _encode(in_filename: str, out_filename: str, verbose: bool):

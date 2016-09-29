@@ -21,7 +21,7 @@ FM_MAIN_MENU = 0x2000
 FM_RANGE_FONT = 0x4000
 
 
-class EncoderTrait:
+class DecoderTrait:
     def __init__(self, in_file_io, out_file_io):
         self._reader = BinaryReader(in_file_io)
         self._writer = YamlWriter(out_file_io)
@@ -89,7 +89,7 @@ class EncoderTrait:
         return self._section
 
 
-class ScbToYamlEncoder(EncoderTrait):
+class ScbToYamlDecoder(DecoderTrait):
     def __init__(self, in_file_io, out_file_io):
         super().__init__(in_file_io, out_file_io)
 

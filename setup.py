@@ -10,7 +10,7 @@ setup(
     author='nikita prianichnikov',
     author_email='lpenguin@yandex.ru',
     description='vangers resource editor',
-    requires=['yaml', 'numpy', 'PIL', 'typing'],
+    install_requires=['pyyaml', 'numpy', 'Pillow', 'typing', 'docopt'],
     entry_points={
         'console_scripts': ['vangers-utils=vangers_utils.cli.main:main'],
     }

@@ -1,4 +1,6 @@
 import struct
+from typing import Tuple, Any
+
 import yaml
 
 
@@ -44,6 +46,21 @@ class BinaryReader:
         if typeSize != len(value):
             raise BinaryReaderEOFException
         return struct.unpack(typeFormat, value)[0]
+
+    def read_bytes(self, size: int):
+        return self.file.read(size)
+
+    def seek(self, offset):
+        return self.file.seek(offset)
+
+    def read_array(self, type_name: str, size: int) -> Tuple[Any]:
+        type_format = size * BinaryReader.typeNames[type_name.lower()]
+        read_size = struct.calcsize(type_format)
+        value = self.file.read(read_size)
+        # if read_size != len(value):
+        #     raise BinaryReaderEOFException
+        return struct.unpack(type_format, value)
+
 
     def _read_str(self):
         size = self.read('int32')

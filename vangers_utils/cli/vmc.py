@@ -16,7 +16,7 @@ from PIL import Image
 from vangers_utils.height_map import read_map
 
 
-def _decode(ini_filename: str, out_filename: str, y_size: int):
+def _decode(in_filename: str, out_filename: str, y_size: int):
     arr1, arr3 = read_map(in_filename, y_size)
     arr1 = np.log2(arr1)
     arr1[np.isneginf(arr1)] = 0

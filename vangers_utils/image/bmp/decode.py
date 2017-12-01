@@ -13,8 +13,7 @@ class BmpImage:
         self.meta = meta
 
 
-def decode_image(file_name: str, palette: List[int],
-                 is_bmp: bool=True, is_background: bool=False, is_no_offsets: bool=False)-> BmpImage:
+def decode_image(file_name: str, palette: List[int]) -> BmpImage:
     with open(file_name, 'rb') as f:
         data = f.read()
         bytes_io = BytesIO(data)
@@ -27,9 +26,6 @@ def decode_image(file_name: str, palette: List[int],
         'size': None,
         'offsetx': None,
         'offsety': None,
-        'is_bmp': int(is_bmp),
-        'is_background': int(is_background),
-        'is_no_offsets': int(is_no_offsets),
     }  # type: Dict[str, int]
 
     sizex = reader.read('uint16')
@@ -39,8 +35,18 @@ def decode_image(file_name: str, palette: List[int],
 
     approx_size = len(data) // (sizex * sizey)
     header_size = len(data) % (sizex * sizey)
-    meta['size'] = approx_size
-    print('SizeX: {sizex}, SizeY: {sizey}, length: {length}, '
+    if header_size == 10:
+        meta['size'] = reader.read('uint16')
+        meta['offsetx'] = reader.read('uint16')
+        meta['offsety'] = reader.read('uint16')
+    elif header_size == 6:
+        meta['size'] = reader.read('uint16')
+    elif header_size == 4:
+        pass
+    else:
+        raise Exception("Wrong header size: {}".format(header_size))
+
+    print('SizeX: {sizex}, SizeY: {sizey}, Offsex: {offsetx}, OffsetY: {offsety}, length: {length}, '
           'approx size: {approx_size}, '
           'header_size: {header_size}'.format(
         sizex=sizex,
@@ -48,25 +54,9 @@ def decode_image(file_name: str, palette: List[int],
         approx_size=approx_size,
         header_size=header_size,
         length=len(data),
+        offsetx=meta['offsetx'],
+        offsety=meta['offsety'],
     ))
-    # exit(0)
-    # if not is_bmp and not is_background:
-    #     if not is_no_offsets:
-    #         meta['size'] = reader.read('uint16')
-    #         meta['offsetx'] = reader.read('uint16')
-    #         meta['offsety'] = reader.read('uint16')
-    #     else:
-    #         # meta['sizex'] = reader.read('uint16')
-    #         # meta['sizey'] = reader.read('uint16')
-    #         meta['size'] = reader.read('uint16')
-    # else:
-    #     if is_bmp:
-    #         # meta['sizex'] = reader.read('uint16')
-    #         # meta['sizey'] = reader.read('uint16')
-    #         meta['size'] = 1
-    #     else:
-    #         raise Exception('Invalid state')
-    #         # meta['size'] = 1
 
     images = []  # type: List[Image]
     for _ in range(meta['size']):

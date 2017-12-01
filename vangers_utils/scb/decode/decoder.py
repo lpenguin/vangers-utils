@@ -174,6 +174,7 @@ class ScbToYamlDecoder(DecoderTrait):
         self._reader.read('int32')
         while True:
             section = self.next_section()
+            print(section)
             if section == Section.I_SCRIPT_EOF:
                 break
 

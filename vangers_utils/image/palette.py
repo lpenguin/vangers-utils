@@ -1,3 +1,4 @@
+import array
 from typing import Tuple, List, Dict
 
 import numpy as np
@@ -68,6 +69,13 @@ def create_palette_mapping(pal: List[int])->Dict[int, np.uint8]:
         res[index] = np.uint8(i // 3)
 
     return res
+
+
+def read_palette(filename: str) -> List[int]:
+    with open(filename, 'rb') as f:
+        a = array.array('B')
+        a.fromfile(f, 768)
+        return a.tolist()
 
 
 PALETTE = [0, 0, 0, 8, 12, 20, 24, 24, 40, 24, 32, 48, 32,

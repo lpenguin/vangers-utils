@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 from PIL import Image
 
@@ -24,24 +26,26 @@ def _read_meta_and_data(file_name: str) -> (XbmImage.Meta, bytes):
     return meta, byte_data
 
 
-def _decode_image(image_data: bytes, screen_width: int, screen_height: int) -> Image:
+def _decode_image(image_data: bytes, screen_width: int, screen_height: int, palette: List[int]) -> Image:
     reader = ImageDataDecoder(
         bytes_data=image_data,
         width=screen_width,
         height=screen_height)
 
     screen = reader.decode()
-    im = misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=vangers_utils.image.palette.PALETTE)
+    im = misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=palette)
     return im#image_misc.replace_transparent(im)
 
 
-def decode_image(file_name: str, screen_width: int, screen_height: int)-> XbmImage:
+def decode_image(file_name: str, screen_width: int, screen_height: int, palette: List[int])-> XbmImage:
     meta, data = _read_meta_and_data(file_name)
     return XbmImage(
         meta=meta,
         image=_decode_image(image_data=data,
                             screen_width=screen_width,
-                            screen_height=screen_height)
+                            screen_height=screen_height,
+                            palette=palette,
+                            )
     )
 
 

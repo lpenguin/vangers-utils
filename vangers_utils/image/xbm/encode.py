@@ -1,17 +1,18 @@
 from io import BytesIO
 from itertools import chain
+from typing import List
 
 import numpy as np
 from PIL import Image
 
 from vangers_utils.binary_writer import BinaryWriter
-from vangers_utils.image.palette import color_index, create_palette_mapping, PALETTE
+from vangers_utils.image.palette import color_index, create_palette_mapping
 from vangers_utils.image.xbm.image import XbmImage
 
 
 class XbmEncoder:
-    def __init__(self):
-        self._pal_mapping = create_palette_mapping(PALETTE)
+    def __init__(self, palette: List[int]):
+        self._pal_mapping = create_palette_mapping(palette)
         self._transparent_color = 255 #self._pal_mapping[_color_index((32, 76, 32))]
 
     def _rgb_to_256(self, data: np.ndarray)->np.ndarray:
@@ -69,10 +70,10 @@ class XbmEncoder:
             w.write('bytes', encoded_data)
 
 
-def encode_image(meta: XbmImage.Meta, in_filename: str, out_file_name: str):
+def encode_image(meta: XbmImage.Meta, in_filename: str, out_file_name: str, palette: List[int]):
     img = Image.open(in_filename)
     data_rgb = np.array(img)
-    XbmEncoder().encode_data_to_file(data_rgb, meta, out_file_name)
+    XbmEncoder(palette).encode_data_to_file(data_rgb, meta, out_file_name)
 
     # data_256 = _rgb_to_256(pal_mapping, data_rgb)
     # _encode_data_to_file(data_256, img_meta, out_file_name)

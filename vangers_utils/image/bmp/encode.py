@@ -33,8 +33,11 @@ def encode_image(file_name: str, meta: Dict[str, int], pal: List[int])-> bytes:
         writer.write('uint16', meta['offsetx'])
         writer.write('uint16', meta['offsety'])
 
-    image = Image.open(file_name)  # type: Image
-    b = _data_to_256(np.array(image), pal).tobytes()
+    if image.mode == 'P':
+        b = bytes(image.getdata())
+    else:
+        b = _data_to_256(np.array(image), pal).tobytes()
+
     bytes_io.write(b)
 
     return bytes_io.getvalue()

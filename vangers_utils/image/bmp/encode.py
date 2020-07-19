@@ -9,8 +9,18 @@ from vangers_utils.image import palette
 
 
 def encode_image(file_name: str, meta: Dict[str, int], pal: List[int])-> bytes:
+    image = Image.open(file_name)  # type: Image
     bytes_io = BytesIO()
     writer = binary_writer.BinaryWriter(bytes_io)
+
+    if meta is None:
+        meta = {
+            'sizex': image.size[0],
+            'sizey': image.size[1],
+            'size': None,
+            'offsetx': None,
+            'offsety': None,
+        }
 
     if meta['sizex'] is not None:
         writer.write('uint16', meta['sizex'])

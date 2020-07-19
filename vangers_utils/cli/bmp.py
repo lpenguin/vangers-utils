@@ -4,7 +4,7 @@
     -e, --encode          encode image to bmp
     -p, --palette PALETTE palette name  [default: default]
 """
-
+import os
 import re
 from typing import Dict
 
@@ -39,8 +39,10 @@ def _encode(in_filename: str, out_filename: str, palette: str):
     palette = read_palette(palette)
 
     meta_filename = get_meta_filename(in_filename)
-    with open(meta_filename) as f:
-        meta = yaml.load(f)
+    meta = None
+    if os.path.exists(meta_filename):
+        with open(meta_filename) as f:
+            meta = yaml.load(f)
 
     bytes_res = encode_image(in_filename, meta, pal=palette)
     with open(out_filename, 'wb') as f:

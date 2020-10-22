@@ -23,8 +23,6 @@ def _decode(in_filename: str, out_filename: str, width: int, height: int, palett
     palette = read_palette(palette_name)
     xbm_image = decode_image(
         file_name=in_filename,
-        screen_width=width,
-        screen_height=height,
         palette=palette,
     )
 

@@ -26,24 +26,24 @@ def _read_meta_and_data(file_name: str) -> (XbmImage.Meta, bytes):
     return meta, byte_data
 
 
-def _decode_image(image_data: bytes, screen_width: int, screen_height: int, palette: List[int]) -> Image:
+def _decode_image(image_data: bytes, width: int, height: int, palette: List[int]) -> Image:
     reader = ImageDataDecoder(
         bytes_data=image_data,
-        width=screen_width,
-        height=screen_height)
+        width=width,
+        height=height)
 
     screen = reader.decode()
-    im = misc.from_bytes(screen.tobytes(), screen_width, screen_height, palette=palette)
+    im = misc.from_bytes(screen.tobytes(), width, height, palette=palette)
     return im#image_misc.replace_transparent(im)
 
 
-def decode_image(file_name: str, screen_width: int, screen_height: int, palette: List[int])-> XbmImage:
+def decode_image(file_name: str, palette: List[int])-> XbmImage:
     meta, data = _read_meta_and_data(file_name)
     return XbmImage(
         meta=meta,
         image=_decode_image(image_data=data,
-                            screen_width=screen_width,
-                            screen_height=screen_height,
+                            width=meta.size_x,
+                            height=meta.size_y,
                             palette=palette,
                             )
     )

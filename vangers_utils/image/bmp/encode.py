@@ -8,8 +8,7 @@ from vangers_utils import binary_writer
 from vangers_utils.image import palette
 
 
-def encode_image(file_name: str, meta: Dict[str, int], pal: List[int])-> bytes:
-    image = Image.open(file_name)  # type: Image
+def encode_image(image: Image, meta: Dict[str, int], pal: List[int])-> bytes:
     bytes_io = BytesIO()
     writer = binary_writer.BinaryWriter(bytes_io)
 

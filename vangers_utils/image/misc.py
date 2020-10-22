@@ -10,7 +10,7 @@ import vangers_utils.image.palette
 def from_bytes(b: bytes, width: int, height: int, palette: List[int]=None)->Image:
     im = Image.frombytes('L', (width, height), b)
     im.putpalette(palette or vangers_utils.image.palette.PALETTE)
-    return im.convert('RGBA')
+    return im
 
 
 def replace_transparent(image: Image, transparent_color: Tuple[int, int, int, int])->Image:

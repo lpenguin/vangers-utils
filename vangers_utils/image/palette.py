@@ -1,5 +1,6 @@
 import array
-from os.path import join, dirname
+from glob import glob
+from os.path import join, dirname, basename
 from typing import Tuple, List, Dict
 
 import numpy as np
@@ -83,4 +84,12 @@ def read_palette_from_file(filename: str) -> List[int]:
 def read_palette(palette_name: str) -> List[int]:
     filename = join(dirname(__file__), 'data', 'pal', '{}.pal'.format(palette_name))
     return read_palette_from_file(filename)
+
+
+def list_palette_names() -> List[str]:
+    files = glob(join(dirname(__file__), 'data', 'pal', '*.pal'))
+    return [
+        basename(file)[:-4]
+        for file in files
+    ]
 

@@ -10,6 +10,7 @@ from typing import Dict
 
 import docopt
 import yaml
+from PIL import Image
 
 from vangers_utils.image.bmp.decode import decode_image
 from vangers_utils.image.bmp.encode import encode_image
@@ -43,8 +44,8 @@ def _encode(in_filename: str, out_filename: str, palette: str):
     if os.path.exists(meta_filename):
         with open(meta_filename) as f:
             meta = yaml.load(f)
-
-    bytes_res = encode_image(in_filename, meta, pal=palette)
+    image = Image.open(in_filename)  # type: Image
+    bytes_res = encode_image(image, meta, pal=palette)
     with open(out_filename, 'wb') as f:
         f.write(bytes_res)
 

@@ -1,7 +1,6 @@
 from typing import Tuple
 
 import numpy as np
-from tqdm import tqdm
 
 from vangers_utils.binary_reader import BinaryReader
 from vangers_utils.decompress import convert_tree, decode_buf
@@ -23,7 +22,7 @@ def read_map(filename: str, y_size: int) -> Tuple[np.array, np.array]:
 
         arr1 = np.zeros((y_size, x_size), np.uint8)
         arr3 = np.zeros((y_size, x_size), np.uint8)
-        for i, (offset, size) in tqdm(enumerate(zip(offset_table, size_table)), total=y_size):
+        for i, (offset, size) in enumerate(zip(offset_table, size_table)):
             reader.seek(offset)
             buf = reader.read_bytes(size)
             vals1, vals3 = decode_buf(buf, decomp_dict1, decomp_dict3)

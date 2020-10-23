@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='vangers-utils',
-    version='0.2.1',
-    packages=['vangers_utils', 'vangers_utils.cli', 'vangers_utils.scb', 'vangers_utils.scb.decode',
+    version='0.3.0',
+    packages=['vangers_utils', 'vangers_utils.gui', 'vangers_utils.cli', 'vangers_utils.scb', 'vangers_utils.scb.decode',
               'vangers_utils.scb.encode', 'vangers_utils.image', 'vangers_utils.image.bmp', 'vangers_utils.image.xbm'],
     url='https://github.com/lpenguin/vangers-utils',
     license='mit',

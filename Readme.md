@@ -6,10 +6,12 @@
 ## Installation
 ```bash
 python3 setup.py install
-vangers-utils -h
 ```
 
+
+### Console mode
 ```
+vangers-utils -h
 usage: vangers-utils <command> [<args>...]
 
 The most commonly used commands are:
@@ -17,4 +19,9 @@ The most commonly used commands are:
    bmp        Decode/encode bmp
    xbm        Decode/encode xbm
 
+```
+
+### GUI mode (experimental)
+```
+vangers-utils-gui
 ```

@@ -5,10 +5,10 @@ import numpy as np
 from PIL import Image
 
 from vangers_utils import binary_writer
-from vangers_utils.image import palette
+from vangers_utils.image import palette, misc
 
 
-def encode_image(image: Image, meta: Dict[str, int], pal: List[int])-> bytes:
+def encode_image(image: Image.Image, meta: Dict[str, int], pal: List[int])-> bytes:
     bytes_io = BytesIO()
     writer = binary_writer.BinaryWriter(bytes_io)
 
@@ -40,6 +40,14 @@ def encode_image(image: Image, meta: Dict[str, int], pal: List[int])-> bytes:
     bytes_io.write(b)
 
     return bytes_io.getvalue()
+
+
+def to_indexed(image: Image.Image, palette: List[int]) -> Image:
+    if image.mode == 'P':
+        return image
+    else:
+        b = _data_to_256(np.array(image), palette).tobytes()
+        return misc.from_bytes(b, image.size[0], image.size[1], palette=palette)
 
 
 def _data_to_256(data: np.ndarray, pal: List[int])->np.ndarray:

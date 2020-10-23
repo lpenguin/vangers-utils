@@ -116,15 +116,16 @@ def decode_image(file_name: str, palette: List[int]) -> BmpImage:
     ))
 
     images = []  # type: List[Image]
-    for _ in range(meta['size'] or 1):
-        b = bytes_io.read(meta['sizex'] * meta['sizey'])
+    b = bytes_io.read(meta['sizex'] * meta['sizey'] * (meta['size'] or 1))
+    # for _ in range(meta['size'] or 1):
 
-        im = misc.from_bytes(b, meta['sizex'], meta['sizey'], palette=palette)
+
+    im = misc.from_bytes(b, meta['sizex'], meta['sizey'] * (meta['size'] or 1), palette=palette)
         # transparent_color = (240, 160, 0, 255)
         # r, g, b = palette[-3:]
         # transparent_color = (r, g, b, 255)
         # image = misc.replace_transparent(im, transparent_color)
-        images.append(im)
+    images.append(im)
         # break
 
     return BmpImage(

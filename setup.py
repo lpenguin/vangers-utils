@@ -12,7 +12,10 @@ setup(
     description='vangers resource editor',
     install_requires=['pyyaml', 'numpy', 'Pillow', 'typing', 'docopt', 'bitarray'],
     entry_points={
-        'console_scripts': ['vangers-utils=vangers_utils.cli.main:main'],
+        'console_scripts': [
+            'vangers-utils=vangers_utils.cli.main:main',
+            'vangers-utils-gui=vangers_utils.gui.__main__:main',
+        ],
     },
     include_package_data=True,
     zip_safe=False

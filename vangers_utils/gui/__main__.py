@@ -1,5 +1,10 @@
 from .convert_app import ConvertApp
 
-if __name__ == '__main__':
+
+def main():
     app = ConvertApp()
     app.run()
+
+
+if __name__ == '__main__':
+    main()
